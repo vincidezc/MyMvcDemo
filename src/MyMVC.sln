@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30501.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMVC", "myMVC\MyMVC.csproj", "{DBB0140E-F976-46AC-8A43-EDD5B514B17E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyMvc.Dal", "MyMvc.Dal\MyMvc.Dal.csproj", "{3E29E230-0715-4BC1-AF05-B9A3845BBB49}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DBB0140E-F976-46AC-8A43-EDD5B514B17E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBB0140E-F976-46AC-8A43-EDD5B514B17E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBB0140E-F976-46AC-8A43-EDD5B514B17E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBB0140E-F976-46AC-8A43-EDD5B514B17E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E29E230-0715-4BC1-AF05-B9A3845BBB49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E29E230-0715-4BC1-AF05-B9A3845BBB49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E29E230-0715-4BC1-AF05-B9A3845BBB49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E29E230-0715-4BC1-AF05-B9A3845BBB49}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
