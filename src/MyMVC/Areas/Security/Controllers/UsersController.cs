@@ -155,7 +155,12 @@ namespace MyMvc.Areas.Security.Controllers
                             Age = user.Age,
                             Gender = user.Gender
                         }).FirstOrDefault();
+
+                //db.Users.Select(u => new UserViewModel { 
+                //    Id = u.Id
+                //}).FirstOrDefault(x => x.Id == id);
             }
+
         }
     }
 }
