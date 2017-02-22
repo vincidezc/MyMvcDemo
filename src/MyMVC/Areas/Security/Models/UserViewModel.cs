@@ -24,5 +24,6 @@ namespace MyMvc.Areas.Security.Models
 
         public IList<string> Schools { get; set; }
 
+		public IList<UserEducationViewModel> Educations { get; set; }
     }
 }
