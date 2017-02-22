@@ -12,9 +12,10 @@ namespace MyMvc.Dal
         public DatabaseContext()
             : base("DefaultConnection")
         {
-
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Education> Educations { get; set; }
+
     }
 }

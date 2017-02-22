@@ -2,6 +2,7 @@
 using MyMvc.Dal;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -30,15 +31,17 @@ namespace MyMvc.Areas.Security.Controllers
         {
             using (var db = new DatabaseContext())
             {
-                var users = (from user in db.Users
+                var users = (from item in db.Users
                              select new UserViewModel
-                 {
-                     Id = user.Id,
-                     Firstname = user.FirstName,
-                     LastName = user.LastName,
-                     Age = user.Age,
-                     Gender = user.Gender
-                 }).ToList();
+                     {
+                         Guid = item.Guid,
+                         Firstname = item.FirstName,
+                         LastName = item.LastName,
+                         Age = item.Age,
+                         Gender = item.Gender,
+                         Schools = item.Educations.Select(s => s.School).ToList()
+                     }).ToList();
+
                 return View(users);
             }
         }
@@ -66,17 +69,40 @@ namespace MyMvc.Areas.Security.Controllers
 
                 using (var db = new DatabaseContext())
                 {
-                    db.Users.Add(new User
-                    {
-                        Id = Guid.NewGuid(),
-                        FirstName = viewModel.Firstname,
-                        LastName = viewModel.LastName,
-                        Age = viewModel.Age,
-                        Gender = viewModel.Gender
-                    });
-                    db.SaveChanges();
+                    var sql = @"exec uspCreateUser @guid,
+	                                @fname,
+	                                @lname,
+	                                @age,
+	                                @gender,
+	                                @empDate,
+	                                @school,
+	                                @yrAttended";
+
+                    var result = db.Database.ExecuteSqlCommand(sql,
+                        new SqlParameter("@guid", Guid.NewGuid()),
+                        new SqlParameter("@fname", viewModel.Firstname),
+                        new SqlParameter("@lname", viewModel.LastName),
+                        new SqlParameter("@age", viewModel.Age),
+                        new SqlParameter("@gender", viewModel.Gender),
+                        new SqlParameter("@empDate", DateTime.UtcNow),
+                        new SqlParameter("@school", "WMSU"),
+                        new SqlParameter("@yrAttended", "2002"));
+
+                    if (result > 1)
+                        return RedirectToAction("Index");
+                    else
+                        return View();
+
+                    //db.Users.Add(new User
+                    //{
+                    //    Id = Guid.NewGuid(),
+                    //    FirstName = viewModel.Firstname,
+                    //    LastName = viewModel.LastName,
+                    //    Age = viewModel.Age,
+                    //    Gender = viewModel.Gender
+                    //});
+                    //db.SaveChanges();
                 }
-                return RedirectToAction("Index");
             }
             catch
             {
@@ -98,7 +124,7 @@ namespace MyMvc.Areas.Security.Controllers
             {
                 using (var db = new DatabaseContext())
                 {
-                    var user = db.Users.FirstOrDefault(u => u.Id == id);
+                    var user = db.Users.FirstOrDefault(u => u.Guid == id);
                     user.FirstName = viewModel.Firstname;
                     user.LastName = viewModel.LastName;
                     user.Age = viewModel.Age;
@@ -129,7 +155,7 @@ namespace MyMvc.Areas.Security.Controllers
             {
                 using (var db = new DatabaseContext())
                 {
-                    var user = db.Users.FirstOrDefault(u => u.Id == id);
+                    var user = db.Users.FirstOrDefault(u => u.Guid == id);
                     db.Users.Remove(user);
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -146,10 +172,10 @@ namespace MyMvc.Areas.Security.Controllers
             using (var db = new DatabaseContext())
             {
                 return (from user in db.Users
-                        where user.Id == id
+                        where user.Guid == id
                         select new UserViewModel
                         {
-                            Id = user.Id,
+                            Guid = user.Guid,
                             Firstname = user.FirstName,
                             LastName = user.LastName,
                             Age = user.Age,
