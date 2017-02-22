@@ -13,6 +13,9 @@
 <table class="table">
     <tr>
         <th>
+            SN
+        </th>
+        <th>
             First Name
         </th>
         <th>
@@ -29,11 +32,17 @@
         </th>
         <th></th>
     </tr>
-
+    @{var x = 1;}
     @foreach (var item in Model)
     {
         <tr>
             <td>
+                @(x++)
+            </td>
+            <td>
+                <span>
+                    <a class="btn btn-link glyphicon glyphicon-plus-sign"></a>
+                </span>
                 @Html.DisplayFor(modelItem => item.Firstname)
             </td>
             <td>
