@@ -36,6 +36,17 @@
     @foreach (var item in Model)
     {
         <tr>
+			<td>
+					@if( item.Educations!=null && item.Educations.Count()>0)
+					{	
+					<a class="text-primary" role="button" data-toggle="collapse" 
+							href="#@("chk_"+@item.Id)"
+							aria-expanded="false" 
+							aria-controls="collapseExample">
+	  				<span class="glyphicon glyphicon-chevron-down"></span>
+					</a>
+				}
+			</td>		
             <td>
                 @(x++)
             </td>
@@ -55,14 +66,35 @@
                 @Html.DisplayFor(modelItem => item.Gender)
             </td>
             <td>
-                @string.Join(",", item.Schools)
-            </td>
-            <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.Guid }) |
                 @Html.ActionLink("Details", "Details", new { id = item.Guid }) |
                 @Html.ActionLink("Delete", "Delete", new { id = item.Guid })
             </td>
         </tr>
+		if( item.Educations!=null && item.Educations.Count()>0)
+		{
+			<tr class="collapse" id="@("chk_"+@item.Id)">
+				<td colspan="7">
+					<h5 style="margin-left:100px">Educations</h5>
+					<table class="table table-condensed table-hover">
+						@foreach (var education in item.Educations) {
+							<tr class="row">
+								<td class="col-md-2"></td>
+								<td class="col-md-3">
+									 @Html.DisplayFor(modelItem => education.Level)
+								</td>
+								<td class="col-md-3">
+									 @Html.DisplayFor(modelItem => education.School)
+								</td>
+								<td class="col-md-3">
+									 @Html.DisplayFor(modelItem => education.SchoolYear)
+								</td>
+							</tr>
+						}
+					</table>
+				</td>
+			</tr>
+		}
     }
 
 </table>
