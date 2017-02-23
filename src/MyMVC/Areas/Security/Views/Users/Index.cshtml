@@ -12,9 +12,7 @@
 </p>
 <table class="table">
     <tr>
-        <th>
-            SN
-        </th>
+        <th style="width:5px"></th>
         <th>
             First Name
         </th>
@@ -27,16 +25,12 @@
         <th>
             @Html.DisplayNameFor(model => model.Gender)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Schools)
-        </th>
         <th></th>
     </tr>
-    @{var x = 1;}
     @foreach (var item in Model)
     {
         <tr>
-			<td>
+            <td>
 					@if( item.Educations!=null && item.Educations.Count()>0)
 					{	
 					<a class="text-primary" role="button" data-toggle="collapse" 
@@ -51,9 +45,6 @@
                 @(x++)
             </td>
             <td>
-                <span>
-                    <a class="btn btn-link glyphicon glyphicon-plus-sign"></a>
-                </span>
                 @Html.DisplayFor(modelItem => item.Firstname)
             </td>
             <td>
@@ -89,12 +80,30 @@
 								<td class="col-md-3">
 									 @Html.DisplayFor(modelItem => education.SchoolYear)
 								</td>
-							</tr>
-						}
-					</table>
-				</td>
-			</tr>
-		}
+        </tr>
+        <tr class="collapse-me_@item.Guid" style="display:none">
+            <td colspan="6">
+                <span>Educations</span>
+            </td>
+        </tr>
+        <tr id="@item.Guid" class="collapse-me_@item.Guid" style="display:none">
+            <td colspan="6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="">
+                            @foreach (var edu in item.Educations)
+                            {
+                                <li class="form-group" style="width: 33%">
+                                    <div class="col-md-6">@edu.School</div>
+                                    <div class="col-md-6">@edu.YearAttended</div>
+                                </li>
     }
 
 </table>
+<script>
+    function toggleEducPane(row) {
+        $(".collapse-me_" + row).slideToggle(200);
+        $("#icon_" + row).toggleClass("glyphicon-plus");
+        $("#icon_" + row).toggleClass("glyphicon-minus");
+    }
+</script>
