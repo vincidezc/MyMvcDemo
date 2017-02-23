@@ -12,7 +12,9 @@
 </p>
 <table class="table">
     <tr>
-        <th style="width:5px"></th>
+        <th>
+            SN
+        </th>
         <th>
             First Name
         </th>
@@ -25,19 +27,33 @@
         <th>
             @Html.DisplayNameFor(model => model.Gender)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Schools)
+        </th>
         <th></th>
     </tr>
+    @{var x = 1;}
     @foreach (var item in Model)
     {
         <tr>
+			<td>
+					@if( item.Educations!=null && item.Educations.Count()>0)
+					{	
+					<a class="text-primary" role="button" data-toggle="collapse" 
+							href="#@("chk_"+@item.Id)"
+							aria-expanded="false" 
+							aria-controls="collapseExample">
+	  				<span class="glyphicon glyphicon-chevron-down"></span>
+					</a>
+				}
+			</td>		
             <td>
-                <span>
-                    <a id="icon_@item.Guid" style="font-size: x-small" class="btn btn-link glyphicon glyphicon-plus" onclick="toggleEducPane('@item.Guid')">
-
-                    </a>
-                </span>
+                @(x++)
             </td>
             <td>
+                <span>
+                    <a class="btn btn-link glyphicon glyphicon-plus-sign"></a>
+                </span>
                 @Html.DisplayFor(modelItem => item.Firstname)
             </td>
             <td>
@@ -55,34 +71,30 @@
                 @Html.ActionLink("Delete", "Delete", new { id = item.Guid })
             </td>
         </tr>
-        <tr class="collapse-me_@item.Guid" style="display:none">
-            <td colspan="6">
-                <span>Educations</span>
-            </td>
-        </tr>
-        <tr id="@item.Guid" class="collapse-me_@item.Guid" style="display:none">
-            <td colspan="6">
-                <div class="row">
-                    <div class="col-md-12">
-                        <ul class="">
-                            @foreach (var edu in item.Educations)
-                            {
-                                <li class="form-group" style="width: 33%">
-                                    <div class="col-md-6">@edu.School</div>
-                                    <div class="col-md-6">@edu.YearAttended</div>
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                </div>
-            </td>
-        </tr>
+		if( item.Educations!=null && item.Educations.Count()>0)
+		{
+			<tr class="collapse" id="@("chk_"+@item.Id)">
+				<td colspan="7">
+					<h5 style="margin-left:100px">Educations</h5>
+					<table class="table table-condensed table-hover">
+						@foreach (var education in item.Educations) {
+							<tr class="row">
+								<td class="col-md-2"></td>
+								<td class="col-md-3">
+									 @Html.DisplayFor(modelItem => education.Level)
+								</td>
+								<td class="col-md-3">
+									 @Html.DisplayFor(modelItem => education.School)
+								</td>
+								<td class="col-md-3">
+									 @Html.DisplayFor(modelItem => education.SchoolYear)
+								</td>
+							</tr>
+						}
+					</table>
+				</td>
+			</tr>
+		}
     }
+
 </table>
-<script>
-    function toggleEducPane(row) {
-        $(".collapse-me_" + row).slideToggle(200);
-        $("#icon_" + row).toggleClass("glyphicon-plus");
-        $("#icon_" + row).toggleClass("glyphicon-minus");
-    }
-</script>
