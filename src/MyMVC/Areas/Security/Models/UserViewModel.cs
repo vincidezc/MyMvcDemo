@@ -22,7 +22,8 @@ namespace MyMvc.Areas.Security.Models
 
         public string Gender { get; set; }
 
-        public IList<string> Schools { get; set; }
+        public IList<EducationViewModel> Educations { get; set; }
 
+        public DateTime? EmploymentDate { get; set; }
     }
 }

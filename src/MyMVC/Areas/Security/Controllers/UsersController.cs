@@ -39,7 +39,12 @@ namespace MyMvc.Areas.Security.Controllers
                          LastName = item.LastName,
                          Age = item.Age,
                          Gender = item.Gender,
-                         Schools = item.Educations.Select(s => s.School).ToList()
+                         Educations = item.Educations.Select(s => 
+                             new EducationViewModel 
+                             { 
+                                 School = s.School, 
+                                 YearAttended = s.YearAttended
+                             }).ToList()
                      }).ToList();
 
                 return View(users);
@@ -69,39 +74,30 @@ namespace MyMvc.Areas.Security.Controllers
 
                 using (var db = new DatabaseContext())
                 {
-                    var sql = @"exec uspCreateUser @guid,
-	                                @fname,
-	                                @lname,
-	                                @age,
-	                                @gender,
-	                                @empDate,
-	                                @school,
-	                                @yrAttended";
+                    var newUser = new User
+                    {
+                        Guid = Guid.NewGuid(),
+                        FirstName = viewModel.Firstname,
+                        LastName = viewModel.LastName,
+                        Age = viewModel.Age,
+                        Gender = viewModel.Gender,
+                        EmploymentDate = viewModel.EmploymentDate
+                    };
 
-                    var result = db.Database.ExecuteSqlCommand(sql,
-                        new SqlParameter("@guid", Guid.NewGuid()),
-                        new SqlParameter("@fname", viewModel.Firstname),
-                        new SqlParameter("@lname", viewModel.LastName),
-                        new SqlParameter("@age", viewModel.Age),
-                        new SqlParameter("@gender", viewModel.Gender),
-                        new SqlParameter("@empDate", DateTime.UtcNow),
-                        new SqlParameter("@school", "WMSU"),
-                        new SqlParameter("@yrAttended", "2002"));
+                    foreach (var edu in viewModel.Educations)
+                    {
+                        newUser.Educations.Add(new Education
+                        {
+                            School = edu.School,
+                            YearAttended = edu.YearAttended
+                        });
+                    }
 
-                    if (result > 1)
-                        return RedirectToAction("Index");
-                    else
-                        return View();
+                    db.Users.Add(newUser);
 
-                    //db.Users.Add(new User
-                    //{
-                    //    Id = Guid.NewGuid(),
-                    //    FirstName = viewModel.Firstname,
-                    //    LastName = viewModel.LastName,
-                    //    Age = viewModel.Age,
-                    //    Gender = viewModel.Gender
-                    //});
-                    //db.SaveChanges();
+                    db.SaveChanges();
+
+                    return RedirectToAction("Index");
                 }
             }
             catch
